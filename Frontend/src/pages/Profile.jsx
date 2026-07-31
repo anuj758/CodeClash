@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router';
 import { useSelector } from 'react-redux';
 import axiosClient from '../utils/axiosClient';
@@ -103,12 +103,12 @@ export default function UserProfile() {
         setUpdateMessage({ type: '', text: '' });
 
         try {
-            await axiosClient.put('user/profile/bio', { bio: editBio });
+            await axiosClient.patch('user/profile/bio', { bio: editBio });
 
             if (selectedFile) {
                 const formData = new FormData();
-                formData.append('image', selectedFile);
-                await axiosClient.put('user/profile/picture', formData, {
+                formData.append('photo', selectedFile);
+                await axiosClient.patch('user/profile/photo', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
             }
@@ -217,7 +217,7 @@ export default function UserProfile() {
                                         setIsEditModalOpen(true);
                                     }}
                                 >
-                                    <span>✏️</span> Edit Profile
+                                    Edit Profile
                                 </button>
                             )}
 

@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const {validateUserName} = require('../models/validators/user');
 const Submission = require('../models/submission');
 const Problem = require('../models/problem');
+const { uploadToCloudinary, cloudinary } = require('../config/cloudinary.js');
 
 const getProfile = async (req, res) => {
     try {
@@ -311,12 +312,67 @@ const getUserInteraction = async (req, res) => {
     }
 };
 
-const updateProfile = async (req, res) => {
+const updatePhoto = async (req, res) => {
+  try {
 
-}
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'Please upload an image file' });
+    }
+    
+    const user = req.user;
+
+    if (user.profileImage.publicId) {
+      await cloudinary.uploader.destroy(user.profileImage.publicId);
+    }
+    
+
+    const cloudinaryResult = await uploadToCloudinary(req.file.buffer, 'codeclash_user_profile_photo');
+
+
+    user.profileImage.url = cloudinaryResult.secure_url;
+    user.profileImage.publicId = cloudinaryResult.public_id; 
+
+    await user.save();
+
+    
+    return res.status(200).json({
+      success: true,
+      message: 'Profile photo updated successfully',
+      avatarUrl: user.avatarUrl,
+    });
+
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const updateBio = async (req, res) => {
+    try {
+        const { bio } = req.body;
+
+        if (!bio || typeof bio !== 'string') {
+            return res.status(400).json({ success: false, message: 'Invalid Bio' });
+        }
+
+        const user = req.user;
+        if(user.bio !== bio.trim()){
+            user.bio = bio.trim();
+            await user.save();
+        }
+
+        return res.status(200).json({ 
+            success: true, 
+            message: 'Bio updated successfully',
+            bio: user.bio 
+        });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
 
 
 module.exports = {getProfile, updateLikeDislike,
-    getUserInteraction, updateProfile, getProblemSubmissions,
+    getUserInteraction, updatePhoto, getProblemSubmissions,
     getRecentSubmissions,
-    getSubmissionById};
+    getSubmissionById, updateBio};
