@@ -1,8 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const User = require('../models/user');
+const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const Problem = require('../models/problem');
+const Problem = require('../models/Problem');
 const {validateUserName, validateEmail} = require('../models/validators/user')
 const { isAccepted } = require('../utils/judge');
 const Language = require('../models/Language');

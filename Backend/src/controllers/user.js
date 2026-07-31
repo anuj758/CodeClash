@@ -2,8 +2,8 @@ const User = require('../models/User');
 const ProblemInteraction = require('../models/ProblemInteraction');
 const mongoose = require('mongoose');
 const {validateUserName} = require('../models/validators/user');
-const Submission = require('../models/submission');
-const Problem = require('../models/problem');
+const Submission = require('../models/Submission');
+const Problem = require('../models/Problem');
 const { uploadToCloudinary, cloudinary } = require('../config/cloudinary.js');
 
 const getProfile = async (req, res) => {

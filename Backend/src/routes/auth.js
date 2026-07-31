@@ -12,6 +12,6 @@ authRouter.post('/resend-link', resendVerificationLink);
 authRouter.post('/check-username/:username', isUserNameAvailable);
 authRouter.get('/check', verifyJWT, checkAuth)
 authRouter.post('/verification-status', checkVerificationStatus)
-// authRouter.patch('/forget-password', changePassword)
+
 
 module.exports = authRouter;

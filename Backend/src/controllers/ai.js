@@ -1,5 +1,5 @@
 const { GoogleGenAI } = require("@google/genai");
-const Problem = require("../models/problem");
+const Problem = require("../models/Problem");
 
 // Initialize Gemini client using your environment variable
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
